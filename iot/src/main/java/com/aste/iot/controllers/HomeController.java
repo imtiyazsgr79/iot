@@ -325,7 +325,7 @@ public class HomeController {
 		
 		for(ViberationData v:viberations){
 			map.put(String.valueOf(v.getMeasurement()),String.valueOf(v.getCreated_date()));
-			
+			map.put(String.valueOf(v.getHumidity()), String.valueOf(v.getTemperature()));
 			
 		}
 		
@@ -373,8 +373,8 @@ public class HomeController {
 	public  ResponseEntity<?> sensorData(@RequestBody ViberationData vb){
 		
 		vb.setMeasurement(vb.getMeasurement());
-		
-		System.out.println(vb.getMeasurement()+"kkkkkkkkkkkkk");
+	//	vb.setTemperature(vb.getTemperature());
+		System.err.println("measurement: " +vb.getMeasurement()+" temperpature: " +vb.getTemperature()+ " humidity: " + vb.getHumidity());
 		if(vb.getMeasurement()>0){
 			
 			vdr.save(vb);
