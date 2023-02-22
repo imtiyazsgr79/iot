@@ -17,12 +17,17 @@ public class ViberationData {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	private long id;
+	
 	@Column(name="measurments")
 	private long measurement;
 	
-	private double temperature;
+	private float temperature;
 	
-	private double humidity;
+	private float humidity;
+	
+	@Column(nullable = false, updatable = false, name="Recorded_at")
+	@CreationTimestamp
+	private Timestamp created_date;
 	   
 	public long getMeasurement() {
 		return measurement;
@@ -30,9 +35,7 @@ public class ViberationData {
 	public void setMeasurement(long measurement) {
 		this.measurement = measurement;
 	}
-	@Column(nullable = false, updatable = false, name="Recorded_at")
-	@CreationTimestamp
-	private Timestamp created_date;
+	
 	
 	public Timestamp getCreated_date() {
 		return created_date;
@@ -43,16 +46,17 @@ public class ViberationData {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public double getTemperature() {
+	 
+	public float getTemperature() {
 		return temperature;
 	}
-	public void setTemperature(double temperature) {
+	public void setTemperature(float temperature) {
 		this.temperature = temperature;
 	}
-	public double getHumidity() {
+	public float getHumidity() {
 		return humidity;
 	}
-	public void setHumidity(double humidity) {
+	public void setHumidity(float humidity) {
 		this.humidity = humidity;
 	}
 	public void setCreated_date(Timestamp created_date) {

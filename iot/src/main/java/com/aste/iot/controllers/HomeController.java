@@ -58,7 +58,7 @@ public class HomeController {
 	public SensorReadingsRepository srp;
 	
 	@Autowired
-	public ViberationDataRepository vdr;
+	public ViberationDataRepository viberationRepo;
 	
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	
@@ -81,11 +81,8 @@ public class HomeController {
 	
 	@PostMapping(path="/addoutput")
 	public String saveOutput(Outputs output ){
-		
 		repo.save(output);
-		return "redirect:/iot";
-		
-	
+		return "redirect:/";
 	}
 	
 	@DeleteMapping(path="/delete/{id}")
@@ -319,16 +316,22 @@ public class HomeController {
 	
 	@GetMapping("/viberationdata")
 	public ResponseEntity<?> allViberationReadings(){
-		List<ViberationData> viberations = vdr.getLast();
+		List<ViberationData> viberations = viberationRepo.getListRecords();
 		
-		Map<String, String> map = new HashMap<>();
-		
-		for(ViberationData v:viberations){
-			map.put(String.valueOf(v.getMeasurement()),String.valueOf(v.getCreated_date()));
-			map.put(String.valueOf(v.getHumidity()), String.valueOf(v.getTemperature()));
-			
-		}
-		
+		/*
+		 * for (ViberationData viberationData : viberations) {
+		 * System.err.println(viberationData.getTemperature()); }
+		 */
+		/*
+		 * Map<String, String> map = new HashMap<>();
+		 * 
+		 * for(ViberationData v:viberations){
+		 * map.put(String.valueOf(v.getMeasurement()),String.valueOf(v.getCreated_date()
+		 * )); map.put(String.valueOf(v.getHumidity()),
+		 * String.valueOf(v.getTemperature()));
+		 * 
+		 * }
+		 */
 		return ResponseEntity.ok(viberations) ;	
 		}
 	
@@ -339,7 +342,7 @@ public class HomeController {
 		ViberationData vd = new ViberationData();
 		vd.setMeasurement(Long.valueOf(body.get("measurement")));
 		
-		vdr.save(vd);
+		viberationRepo.save(vd);
 		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		//return ResponseEntity.ok(vd);
@@ -349,7 +352,7 @@ public class HomeController {
 	@PostMapping(value="/viberationdatas",consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<?>  viberationData(@RequestBody ViberationData vdrd){
 		vdrd.setMeasurement(vdrd.getMeasurement());
-		vdr.save(vdrd);
+		viberationRepo.save(vdrd);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		//return ResponseEntity.ok(vd);
 		
@@ -361,7 +364,7 @@ public class HomeController {
 		ViberationData vd = new ViberationData();
 		vd.setMeasurement(Long.valueOf(body.get("measurement")));
 		
-		vdr.save(vd);
+		viberationRepo.save(vd);
 		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		//return ResponseEntity.ok(vd);
@@ -373,11 +376,10 @@ public class HomeController {
 	public  ResponseEntity<?> sensorData(@RequestBody ViberationData vb){
 		
 		vb.setMeasurement(vb.getMeasurement());
-	//	vb.setTemperature(vb.getTemperature());
+		
 		System.err.println("measurement: " +vb.getMeasurement()+" temperpature: " +vb.getTemperature()+ " humidity: " + vb.getHumidity());
-		if(vb.getMeasurement()>0){
-			
-			vdr.save(vb);
+		if(vb.getMeasurement()>0 && vb.getTemperature() > 0 && vb.getHumidity() > 0){
+			viberationRepo.save(vb);
 		}
 		
 		/*ResponseEntity<?> response=null;
@@ -401,6 +403,12 @@ public class HomeController {
 	public void exception(Exception e){
 		e.printStackTrace();
 	   }
+	
+	@GetMapping(value="/showcharts")
+	  public String showCharts(ModelMap model){
+	    model.addAttribute("viberationData", new ViberationData());
+	    return"showCharts";
+	  }
 	
 }
 
