@@ -292,7 +292,7 @@ function update(){
  }
     setInterval(function(){
         update()
-    }, 1000)
+    }, 3000)
            		  	
  
   
@@ -310,8 +310,9 @@ function update1(){
 		  console.log("Data....",data);
 	    // templ= data.length-1;
  	   templ = data[0].humidity;
-		  console.log("....humid",templ);
+		  console.log("....humid",templ,data[0].measurement,data[0].humidity);
 
+		  
 		  $(".humid").text(templ);
 		  
            	  
@@ -321,7 +322,7 @@ function update1(){
  }
     setInterval(function(){
         update1()
-    }, 1000)
+    }, 3000)
 
     </script>
 </body>
